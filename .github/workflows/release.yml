@@ -28,7 +28,8 @@ jobs:
             libgtk-3-dev \
             pkg-config cmake \
             wget unzip \
-            libomp-dev
+            libomp-dev \
+            libvulkan-dev
 
       - name: Build whisper.cpp
         run: make whisper-lib

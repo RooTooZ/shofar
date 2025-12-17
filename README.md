@@ -130,8 +130,8 @@ sudo pacman -S wtype
 <summary><b>🐧 Ubuntu / Debian</b></summary>
 
 ```bash
-sudo apt install libportaudio2 libportaudio-dev libayatana-appindicator3-dev \
-                 libgtk-3-dev pkg-config cmake xdotool
+sudo apt install libportaudio2 portaudio19-dev libayatana-appindicator3-dev \
+                 libgtk-3-dev libvulkan-dev pkg-config cmake xdotool
 ```
 
 For Wayland:
@@ -165,7 +165,7 @@ pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-cmake
 #### 2. Build
 
 ```bash
-git clone https://github.com/user/shofar.git
+git clone https://github.com/RooTooZ/shofar.git
 cd shofar
 
 # Build everything (whisper.cpp + llama.cpp + binary)
