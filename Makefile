@@ -7,6 +7,9 @@ BIN_DIR := bin
 WHISPER_DIR := third_party/whisper.cpp
 LLAMA_DIR := third_party/llama.cpp
 
+# Cross-platform CPU count
+NPROC := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
+
 # === Vosk ===
 VOSK_VERSION := 0.3.45
 VOSK_DIR := third_party/vosk
@@ -51,7 +54,7 @@ whisper-lib:
 		echo "Сборка whisper.cpp..."; \
 		cd $(WHISPER_DIR) && \
 		cmake -B build -DBUILD_SHARED_LIBS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_BUILD_TESTS=OFF && \
-		cmake --build build --config Release -j$$(nproc); \
+		cmake --build build --config Release -j$(NPROC); \
 	fi
 	@echo "whisper.cpp готов"
 
@@ -66,7 +69,7 @@ llama-lib:
 		echo "Сборка llama.cpp..."; \
 		cd $(LLAMA_DIR) && \
 		cmake -B build -DBUILD_SHARED_LIBS=OFF -DLLAMA_BUILD_TOOLS=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_COMMON=OFF && \
-		cmake --build build --target llama --config Release -j$$(nproc); \
+		cmake --build build --target llama --config Release -j$(NPROC); \
 	fi
 	@echo "llama.cpp готов"
 

@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libportaudio2 libportaudio-dev \
+            libportaudio2 portaudio19-dev \
             libayatana-appindicator3-dev \
             libgtk-3-dev \
             pkg-config cmake \
@@ -71,34 +71,40 @@ jobs:
           brew install portaudio pkg-config cmake
 
       - name: Build whisper.cpp
-        run: make whisper-lib
+        run: |
+          if [ ! -d third_party/whisper.cpp ]; then
+            mkdir -p third_party
+            git clone --depth 1 https://github.com/ggml-org/whisper.cpp.git third_party/whisper.cpp
+          fi
+          cd third_party/whisper.cpp
+          cmake -B build -DBUILD_SHARED_LIBS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_BUILD_TESTS=OFF \
+            -DGGML_METAL=OFF -DGGML_BLAS=OFF
+          cmake --build build --config Release -j$(sysctl -n hw.ncpu)
 
       - name: Build llama.cpp
-        run: make llama-lib
+        run: |
+          if [ ! -d third_party/llama.cpp ]; then
+            mkdir -p third_party
+            git clone --depth 1 https://github.com/ggml-org/llama.cpp.git third_party/llama.cpp
+          fi
+          cd third_party/llama.cpp
+          cmake -B build -DBUILD_SHARED_LIBS=OFF -DLLAMA_BUILD_TOOLS=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_COMMON=OFF \
+            -DGGML_METAL=OFF -DGGML_BLAS=OFF
+          cmake --build build --target llama --config Release -j$(sysctl -n hw.ncpu)
 
       - name: Generate icons
         run: make generate-icons
 
-      - name: Build binary (amd64)
-        run: |
-          CGO_ENABLED=1 GOARCH=amd64 go build -ldflags "-s -w -X main.Version=${{ github.ref_name }}" \
-            -o shofar-darwin-amd64 ./cmd/shofar
-
       - name: Build binary (arm64)
         run: |
+          export CGO_CFLAGS="-I$(pwd)/third_party/whisper.cpp/include -I$(pwd)/third_party/whisper.cpp/ggml/include -I$(pwd)/third_party/llama.cpp/include -I$(pwd)/third_party/llama.cpp/ggml/include"
+          export CGO_LDFLAGS="-L$(pwd)/third_party/whisper.cpp/build/src -lwhisper -L$(pwd)/third_party/llama.cpp/build/src -lllama -L$(pwd)/third_party/llama.cpp/build/ggml/src -lggml -lggml-base -lggml-cpu -lstdc++ -framework Accelerate"
           CGO_ENABLED=1 GOARCH=arm64 go build -ldflags "-s -w -X main.Version=${{ github.ref_name }}" \
             -o shofar-darwin-arm64 ./cmd/shofar
 
       - name: Package
         run: |
-          tar -czvf shofar-${{ github.ref_name }}-darwin-amd64.tar.gz shofar-darwin-amd64
           tar -czvf shofar-${{ github.ref_name }}-darwin-arm64.tar.gz shofar-darwin-arm64
-
-      - name: Upload artifact (amd64)
-        uses: actions/upload-artifact@v4
-        with:
-          name: darwin-amd64
-          path: shofar-${{ github.ref_name }}-darwin-amd64.tar.gz
 
       - name: Upload artifact (arm64)
         uses: actions/upload-artifact@v4
@@ -159,6 +165,7 @@ jobs:
 
   release:
     needs: [build-linux, build-macos, build-windows]
+    if: always() && needs.build-linux.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: write
