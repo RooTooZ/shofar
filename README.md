@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="assets/logo.svg" alt="Shofar Logo" width="100">
-
 # Shofar
 
 ### Cross-Platform Voice-to-Text
