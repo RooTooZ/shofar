@@ -70,8 +70,8 @@ install_shofar() {
         info "Latest version: $VERSION"
     fi
 
-    # Construct download URL
-    FILENAME="shofar-${VERSION}-${OS}-${ARCH}"
+    # Construct download URL (filename includes 'v' prefix)
+    FILENAME="shofar-v${VERSION}-${OS}-${ARCH}"
     if [ "$OS" = "windows" ]; then
         FILENAME="${FILENAME}.zip"
     else
