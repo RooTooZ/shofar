@@ -130,8 +130,12 @@ sudo pacman -S wtype
 <summary><b>🐧 Ubuntu / Debian</b></summary>
 
 ```bash
-sudo apt install libportaudio2 portaudio19-dev libayatana-appindicator3-dev \
-                 libgtk-3-dev libvulkan-dev pkg-config cmake xdotool
+sudo apt install gcc pkg-config cmake xdotool \
+    libportaudio2 portaudio19-dev \
+    libayatana-appindicator3-dev libgtk-3-dev \
+    libwayland-dev libx11-dev libx11-xcb-dev \
+    libxkbcommon-x11-dev libgles2-mesa-dev \
+    libegl1-mesa-dev libffi-dev libxcursor-dev libvulkan-dev
 ```
 
 For Wayland:
