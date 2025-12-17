@@ -122,7 +122,6 @@ install_shofar() {
         # Install Vosk library
         if [ -d "lib" ]; then
             cp -r lib/* "$DATA_DIR/lib/"
-            info "Libraries installed to: $DATA_DIR/lib"
         fi
 
         # Create launcher script
@@ -133,8 +132,24 @@ exec "$INSTALL_DIR/shofar" "\$@"
 LAUNCHER
         chmod +x "$INSTALL_DIR/shofar-run"
 
+        # Install desktop entry and icon
+        DESKTOP_DIR="$HOME/.local/share/applications"
+        ICON_DIR="$HOME/.local/share/icons"
+        mkdir -p "$DESKTOP_DIR" "$ICON_DIR"
+
+        if [ -f "shofar.png" ]; then
+            cp shofar.png "$ICON_DIR/shofar.png"
+        fi
+
+        if [ -f "shofar.desktop" ]; then
+            # Update Exec path in desktop file
+            sed "s|Exec=shofar-run|Exec=$INSTALL_DIR/shofar-run|g" shofar.desktop > "$DESKTOP_DIR/shofar.desktop"
+            sed -i "s|Icon=shofar|Icon=$ICON_DIR/shofar.png|g" "$DESKTOP_DIR/shofar.desktop"
+            chmod +x "$DESKTOP_DIR/shofar.desktop"
+            info "Desktop entry installed"
+        fi
+
         info "Installed to: $INSTALL_DIR/shofar"
-        info "Run with: shofar-run (or set LD_LIBRARY_PATH manually)"
     fi
 
     # Check if in PATH

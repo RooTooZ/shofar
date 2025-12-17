@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Shofar
+Comment=Voice-to-Text for Desktop
+Exec=shofar-run
+Icon=shofar
+Terminal=false
+Type=Application
+Categories=Utility;AudioVideo;Audio;
+Keywords=voice;speech;text;transcription;whisper;
+StartupNotify=false
