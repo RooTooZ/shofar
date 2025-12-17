@@ -102,7 +102,6 @@ install_shofar() {
         BINARY="shofar.exe"
     else
         tar -xzf "$FILENAME"
-        BINARY="shofar-${OS}-${ARCH}"
     fi
 
     # Install
@@ -110,14 +109,32 @@ install_shofar() {
     mkdir -p "$DATA_DIR/models/whisper"
     mkdir -p "$DATA_DIR/models/vosk"
     mkdir -p "$DATA_DIR/models/llm"
+    mkdir -p "$DATA_DIR/lib"
 
     if [ "$OS" = "windows" ]; then
         mv "$BINARY" "$INSTALL_DIR/shofar.exe"
         info "Installed to: $INSTALL_DIR/shofar.exe"
     else
-        mv "$BINARY" "$INSTALL_DIR/shofar"
+        # Install binary and libraries
+        mv shofar "$INSTALL_DIR/shofar"
         chmod +x "$INSTALL_DIR/shofar"
+
+        # Install Vosk library
+        if [ -d "lib" ]; then
+            cp -r lib/* "$DATA_DIR/lib/"
+            info "Libraries installed to: $DATA_DIR/lib"
+        fi
+
+        # Create launcher script
+        cat > "$INSTALL_DIR/shofar-run" << LAUNCHER
+#!/bin/sh
+export LD_LIBRARY_PATH="$DATA_DIR/lib:\$LD_LIBRARY_PATH"
+exec "$INSTALL_DIR/shofar" "\$@"
+LAUNCHER
+        chmod +x "$INSTALL_DIR/shofar-run"
+
         info "Installed to: $INSTALL_DIR/shofar"
+        info "Run with: shofar-run (or set LD_LIBRARY_PATH manually)"
     fi
 
     # Check if in PATH

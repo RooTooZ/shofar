@@ -52,7 +52,18 @@ jobs:
 
       - name: Package
         run: |
-          tar -czvf shofar-${{ github.ref_name }}-linux-amd64.tar.gz shofar-linux-amd64
+          mkdir -p shofar-release/lib
+          cp shofar-linux-amd64 shofar-release/shofar
+          cp third_party/vosk/vosk-linux-x86_64-0.3.45/libvosk.so shofar-release/lib/
+          cp -r third_party/vosk/vosk-linux-x86_64-0.3.45/*.h shofar-release/lib/ 2>/dev/null || true
+          cat > shofar-release/shofar.sh << 'EOF'
+#!/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
+exec "$DIR/shofar" "$@"
+EOF
+          chmod +x shofar-release/shofar.sh
+          tar -czvf shofar-${{ github.ref_name }}-linux-amd64.tar.gz -C shofar-release .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
