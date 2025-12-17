@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	"whisper-input/internal/models"
+	"shofar/internal/models"
 )
 
 // Factory управляет созданием и переключением распознавателей.

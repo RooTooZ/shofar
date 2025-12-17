@@ -4,7 +4,7 @@ package hotkey
 
 import (
 	"golang.design/x/hotkey"
-	"whisper-input/internal/config"
+	"shofar/internal/config"
 )
 
 // modifierMap маппинг config.Modifier -> hotkey.Modifier для Linux

@@ -16,9 +16,9 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 
-	"whisper-input/internal/config"
-	"whisper-input/internal/i18n"
-	"whisper-input/internal/models"
+	"shofar/internal/config"
+	"shofar/internal/i18n"
+	"shofar/internal/models"
 )
 
 // Colors are defined in widgets.go

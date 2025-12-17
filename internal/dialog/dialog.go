@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/ncruces/zenity"
-	"whisper-input/internal/config"
+	"shofar/internal/config"
 )
 
 // SelectHotkey открывает диалог выбора горячей клавиши.

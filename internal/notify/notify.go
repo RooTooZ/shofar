@@ -3,7 +3,7 @@ package notify
 
 import (
 	"github.com/gen2brain/beeep"
-	"whisper-input/internal/i18n"
+	"shofar/internal/i18n"
 )
 
 const appName = "Shofar"

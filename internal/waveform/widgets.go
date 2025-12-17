@@ -17,7 +17,7 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 
-	"whisper-input/internal/i18n"
+	"shofar/internal/i18n"
 )
 
 // drawVisualization draws the complete visualization during recording.

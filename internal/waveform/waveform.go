@@ -15,7 +15,7 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 
-	"whisper-input/internal/i18n"
+	"shofar/internal/i18n"
 )
 
 // State represents the window display state.

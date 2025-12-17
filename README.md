@@ -254,7 +254,7 @@ Right-click tray icon for:
 
 ```
 shofar/
-├── cmd/whisper-input/     # Entry point
+├── cmd/shofar/            # Entry point
 ├── internal/
 │   ├── app/               # Main coordinator
 │   ├── audio/             # PortAudio recording

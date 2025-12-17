@@ -1,4 +1,4 @@
-module whisper-input
+module shofar
 
 go 1.23.8
 

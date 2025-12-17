@@ -7,7 +7,6 @@ bin/
 *.dylib
 
 # Binary (root level only)
-/whisper-input
 /shofar
 
 # Third-party libraries (built locally)

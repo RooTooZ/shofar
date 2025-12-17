@@ -93,7 +93,7 @@ build: whisper-lib llama-lib download-vosk-lib check-icons
 	@mkdir -p $(BIN_DIR)/models/whisper
 	@mkdir -p $(BIN_DIR)/models/vosk
 	@mkdir -p $(BIN_DIR)/models/llm
-	CGO_ENABLED=1 go build -ldflags "$(LDFLAGS)" -o $(BIN_DIR)/shofar ./cmd/whisper-input
+	CGO_ENABLED=1 go build -ldflags "$(LDFLAGS)" -o $(BIN_DIR)/shofar ./cmd/shofar
 	@echo ""
 	@echo "Собрано: $(BIN_DIR)/shofar"
 	@echo "Размер: $$(du -h $(BIN_DIR)/shofar | cut -f1)"

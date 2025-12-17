@@ -16,9 +16,9 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 
-	"whisper-input/internal/config"
-	"whisper-input/internal/i18n"
-	"whisper-input/internal/models"
+	"shofar/internal/config"
+	"shofar/internal/i18n"
+	"shofar/internal/models"
 )
 
 // Color palette - modern dark theme

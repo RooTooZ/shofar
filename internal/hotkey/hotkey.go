@@ -8,7 +8,7 @@ import (
 
 	"golang.design/x/hotkey"
 	"golang.design/x/hotkey/mainthread"
-	"whisper-input/internal/config"
+	"shofar/internal/config"
 )
 
 // Handler обрабатывает события горячих клавиш.

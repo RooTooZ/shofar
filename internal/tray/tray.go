@@ -3,8 +3,8 @@ package tray
 
 import (
 	"github.com/getlantern/systray"
-	"whisper-input/embedded"
-	"whisper-input/internal/i18n"
+	"shofar/embedded"
+	"shofar/internal/i18n"
 )
 
 // State представляет состояние приложения для отображения в трее.

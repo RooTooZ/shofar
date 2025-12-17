@@ -18,7 +18,7 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget/material"
 
-	"whisper-input/internal/i18n"
+	"shofar/internal/i18n"
 )
 
 var (
