@@ -99,7 +99,19 @@ Most voice input solutions are either **cloud-based** (privacy concerns), **requ
 
 ## 📦 Installation
 
-### 1. Install Dependencies
+### Quick Install (Recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/RooTooZ/shofar/main/install.sh | sh
+```
+
+Or download from [Releases](https://github.com/RooTooZ/shofar/releases).
+
+---
+
+### Build from Source
+
+#### 1. Install Dependencies
 
 <details>
 <summary><b>🐧 Arch Linux</b></summary>
@@ -150,7 +162,7 @@ pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-cmake
 ```
 </details>
 
-### 2. Build
+#### 2. Build
 
 ```bash
 git clone https://github.com/user/shofar.git
@@ -163,7 +175,7 @@ make all
 make install
 ```
 
-### 3. Download a Model
+#### 3. Download a Model
 
 Models download automatically via Settings UI, or:
 

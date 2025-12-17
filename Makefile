@@ -1,5 +1,5 @@
 .PHONY: build clean clean-all generate-icons whisper-lib llama-lib download-vosk-lib \
-	all install run deps check help
+	all install run deps check help release release-linux release-darwin release-windows
 
 VERSION := 0.1.0
 LDFLAGS := -s -w -X main.Version=$(VERSION)
@@ -134,6 +134,23 @@ check:
 # Запуск
 run: build
 	LD_LIBRARY_PATH=$(VOSK_LIB_DIR):$$LD_LIBRARY_PATH ./$(BIN_DIR)/shofar
+
+# === Release ===
+RELEASE_DIR := release
+
+release-linux: whisper-lib llama-lib download-vosk-lib check-icons
+	@mkdir -p $(RELEASE_DIR)
+	@echo "Building for Linux amd64..."
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=1 \
+		go build -ldflags "$(LDFLAGS)" -o $(RELEASE_DIR)/shofar-linux-amd64 ./cmd/shofar
+	@cd $(RELEASE_DIR) && tar -czvf shofar-$(VERSION)-linux-amd64.tar.gz shofar-linux-amd64
+	@rm $(RELEASE_DIR)/shofar-linux-amd64
+	@echo "Created: $(RELEASE_DIR)/shofar-$(VERSION)-linux-amd64.tar.gz"
+
+release: release-linux
+	@echo ""
+	@echo "Release files in $(RELEASE_DIR)/"
+	@ls -lh $(RELEASE_DIR)/
 
 # Помощь
 help:
