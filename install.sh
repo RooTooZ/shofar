@@ -31,8 +31,8 @@ error() {
 detect_os() {
     case "$(uname -s)" in
         Linux*)  echo "linux" ;;
-        Darwin*) echo "darwin" ;;
-        MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
+        Darwin*) error "macOS: Pre-built binaries not available. Please build from source: make all" ;;
+        MINGW*|MSYS*|CYGWIN*) error "Windows: Pre-built binaries not available. Please build from source." ;;
         *) error "Unsupported OS: $(uname -s)" ;;
     esac
 }

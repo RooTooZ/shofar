@@ -27,7 +27,8 @@ jobs:
             libayatana-appindicator3-dev \
             libgtk-3-dev \
             pkg-config cmake \
-            wget unzip
+            wget unzip \
+            libomp-dev
 
       - name: Build whisper.cpp
         run: make whisper-lib
@@ -43,8 +44,8 @@ jobs:
 
       - name: Build binary
         run: |
-          CGO_ENABLED=1 go build -ldflags "-s -w -X main.Version=${{ github.ref_name }}" \
-            -o shofar-linux-amd64 ./cmd/shofar
+          make build VERSION=${{ github.ref_name }}
+          mv bin/shofar shofar-linux-amd64
 
       - name: Package
         run: |
@@ -56,116 +57,11 @@ jobs:
           name: linux-amd64
           path: shofar-${{ github.ref_name }}-linux-amd64.tar.gz
 
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: Install dependencies
-        run: |
-          brew install portaudio pkg-config cmake
-
-      - name: Build whisper.cpp
-        run: |
-          if [ ! -d third_party/whisper.cpp ]; then
-            mkdir -p third_party
-            git clone --branch v1.7.5 --depth 1 https://github.com/ggml-org/whisper.cpp.git third_party/whisper.cpp
-          fi
-          cd third_party/whisper.cpp
-          cmake -B build -DBUILD_SHARED_LIBS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_BUILD_TESTS=OFF \
-            -DGGML_METAL=OFF -DGGML_BLAS=OFF -DGGML_ACCELERATE=OFF
-          cmake --build build --config Release -j$(sysctl -n hw.ncpu)
-
-      - name: Build llama.cpp
-        run: |
-          if [ ! -d third_party/llama.cpp ]; then
-            mkdir -p third_party
-            git clone --branch b5270 --depth 1 https://github.com/ggml-org/llama.cpp.git third_party/llama.cpp
-          fi
-          cd third_party/llama.cpp
-          cmake -B build -DBUILD_SHARED_LIBS=OFF -DLLAMA_BUILD_TOOLS=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_COMMON=OFF \
-            -DGGML_METAL=OFF -DGGML_BLAS=OFF -DGGML_ACCELERATE=OFF
-          cmake --build build --target llama --config Release -j$(sysctl -n hw.ncpu)
-
-      - name: Generate icons
-        run: make generate-icons
-
-      - name: Build binary (arm64)
-        run: |
-          export CGO_CFLAGS="-I$(pwd)/third_party/whisper.cpp/include -I$(pwd)/third_party/whisper.cpp/ggml/include -I$(pwd)/third_party/llama.cpp/include -I$(pwd)/third_party/llama.cpp/ggml/include"
-          export CGO_LDFLAGS="-L$(pwd)/third_party/whisper.cpp/build/src -lwhisper -L$(pwd)/third_party/llama.cpp/build/src -lllama -L$(pwd)/third_party/llama.cpp/build/ggml/src -lggml -lggml-base -lggml-cpu -lstdc++ -framework Accelerate"
-          CGO_ENABLED=1 GOARCH=arm64 go build -ldflags "-s -w -X main.Version=${{ github.ref_name }}" \
-            -o shofar-darwin-arm64 ./cmd/shofar
-
-      - name: Package
-        run: |
-          tar -czvf shofar-${{ github.ref_name }}-darwin-arm64.tar.gz shofar-darwin-arm64
-
-      - name: Upload artifact (arm64)
-        uses: actions/upload-artifact@v4
-        with:
-          name: darwin-arm64
-          path: shofar-${{ github.ref_name }}-darwin-arm64.tar.gz
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: Set up MSYS2
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW64
-          update: true
-          install: >-
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-portaudio
-            mingw-w64-x86_64-pkg-config
-            make
-            git
-
-      - name: Build whisper.cpp
-        shell: msys2 {0}
-        run: make whisper-lib
-
-      - name: Build llama.cpp
-        shell: msys2 {0}
-        run: make llama-lib
-
-      - name: Generate icons
-        shell: msys2 {0}
-        run: make generate-icons
-
-      - name: Build binary
-        shell: msys2 {0}
-        run: |
-          CGO_ENABLED=1 go build -ldflags "-s -w -X main.Version=${{ github.ref_name }}" \
-            -o shofar.exe ./cmd/shofar
-
-      - name: Package
-        run: |
-          Compress-Archive -Path shofar.exe -DestinationPath shofar-${{ github.ref_name }}-windows-amd64.zip
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-amd64
-          path: shofar-${{ github.ref_name }}-windows-amd64.zip
+  # macOS and Windows builds disabled for now - complex CGO dependencies
+  # Users can build from source using: make all
 
   release:
-    needs: [build-linux, build-macos, build-windows]
-    if: always() && needs.build-linux.result == 'success'
+    needs: [build-linux]
     runs-on: ubuntu-latest
     permissions:
       contents: write
