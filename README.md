@@ -2,13 +2,15 @@
 
 # 🎺 Shofar
 
-### Voice-to-Text for Linux Desktop
+### Cross-Platform Voice-to-Text
 
 **Speak naturally. Type instantly.**
 
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat-square&logo=go)](https://go.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)](https://www.linux.org/)
+[![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black)](https://www.linux.org/)
+[![macOS](https://img.shields.io/badge/macOS-000000?style=flat-square&logo=apple&logoColor=white)](https://www.apple.com/macos/)
+[![Windows](https://img.shields.io/badge/Windows-0078D6?style=flat-square&logo=windows&logoColor=white)](https://www.microsoft.com/windows/)
 
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Models](#-models) • [Architecture](#-architecture)
 
@@ -39,7 +41,7 @@
 
 ## 💡 Why Shofar?
 
-Most voice input solutions for Linux are either **cloud-based** (privacy concerns), **require complex setup**, or **don't integrate** with the desktop. Shofar is different:
+Most voice input solutions are either **cloud-based** (privacy concerns), **require complex setup**, or **don't integrate** with the desktop. Shofar is different:
 
 | Problem | Shofar Solution |
 |---------|-----------------|
@@ -123,6 +125,28 @@ sudo apt install libportaudio2 libportaudio-dev libayatana-appindicator3-dev \
 For Wayland:
 ```bash
 sudo apt install wtype
+```
+</details>
+
+<details>
+<summary><b>🍎 macOS</b></summary>
+
+```bash
+brew install portaudio pkg-config cmake
+```
+</details>
+
+<details>
+<summary><b>🪟 Windows</b></summary>
+
+Requires:
+- MinGW-w64 or MSYS2
+- CMake
+- PortAudio
+
+```powershell
+# Using MSYS2
+pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-cmake
 ```
 </details>
 
@@ -255,7 +279,7 @@ shofar/
 | Audio | [PortAudio](http://www.portaudio.com/) |
 | GUI | [Gio](https://gioui.org/) |
 | Tray | [systray](https://github.com/getlantern/systray) |
-| Text Input | xdotool (X11) / wtype (Wayland) |
+| Text Input | xdotool (X11) / wtype (Wayland) / CGEventPost (macOS) / SendInput (Windows) |
 
 ---
 
@@ -307,7 +331,7 @@ make clean          # Clean artifacts
 
 **[⬆ Back to top](#-shofar)**
 
-Made with ❤️ for Linux desktop users
+Made with ❤️ for desktop users everywhere
 
 *Star ⭐ if you find it useful!*
 
