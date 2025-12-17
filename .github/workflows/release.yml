@@ -74,22 +74,22 @@ jobs:
         run: |
           if [ ! -d third_party/whisper.cpp ]; then
             mkdir -p third_party
-            git clone --depth 1 https://github.com/ggml-org/whisper.cpp.git third_party/whisper.cpp
+            git clone --branch v1.7.5 --depth 1 https://github.com/ggml-org/whisper.cpp.git third_party/whisper.cpp
           fi
           cd third_party/whisper.cpp
           cmake -B build -DBUILD_SHARED_LIBS=OFF -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_BUILD_TESTS=OFF \
-            -DGGML_METAL=OFF -DGGML_BLAS=OFF
+            -DGGML_METAL=OFF -DGGML_BLAS=OFF -DGGML_ACCELERATE=OFF
           cmake --build build --config Release -j$(sysctl -n hw.ncpu)
 
       - name: Build llama.cpp
         run: |
           if [ ! -d third_party/llama.cpp ]; then
             mkdir -p third_party
-            git clone --depth 1 https://github.com/ggml-org/llama.cpp.git third_party/llama.cpp
+            git clone --branch b5270 --depth 1 https://github.com/ggml-org/llama.cpp.git third_party/llama.cpp
           fi
           cd third_party/llama.cpp
           cmake -B build -DBUILD_SHARED_LIBS=OFF -DLLAMA_BUILD_TOOLS=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_COMMON=OFF \
-            -DGGML_METAL=OFF -DGGML_BLAS=OFF
+            -DGGML_METAL=OFF -DGGML_BLAS=OFF -DGGML_ACCELERATE=OFF
           cmake --build build --target llama --config Release -j$(sysctl -n hw.ncpu)
 
       - name: Generate icons
