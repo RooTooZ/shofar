@@ -102,7 +102,7 @@ Most voice input solutions are either **cloud-based** (privacy concerns), **requ
 ### Quick Install (Recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/RooTooZ/shofar/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/RooTooZ/shofar/master/install.sh | sh
 ```
 
 Or download from [Releases](https://github.com/RooTooZ/shofar/releases).

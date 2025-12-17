@@ -2,7 +2,7 @@
 set -e
 
 # Shofar Install Script
-# Usage: curl -fsSL https://raw.githubusercontent.com/RooTooZ/shofar/main/install.sh | sh
+# Usage: curl -fsSL https://raw.githubusercontent.com/RooTooZ/shofar/master/install.sh | sh
 
 REPO="RooTooZ/shofar"
 INSTALL_DIR="$HOME/.local/bin"
