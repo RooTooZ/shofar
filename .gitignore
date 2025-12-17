@@ -1,0 +1,49 @@
+# Build output
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Binary (root level only)
+/whisper-input
+/shofar
+
+# Third-party libraries (built locally)
+third_party/whisper.cpp/
+third_party/llama.cpp/
+third_party/vosk/
+
+# Embedded models (too large for git)
+embedded/*.bin
+embedded/vosk_model/
+
+# Config files
+bin/config.json
+config.json
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Go
+*.test
+*.out
+coverage.html
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Claude Code
+.claude/
+CLAUDE.md
